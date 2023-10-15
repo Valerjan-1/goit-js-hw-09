@@ -21,7 +21,7 @@ function formSubmit(e) {
 
   let delay = Number(form.delay.value);
 
-  for (i = 1; i <= form.amount.value; i += 1) {
+  for (let i = 1; i <= form.amount.value; i += 1) {
     createPromise(i, delay)
       .then(({ position, delay }) => {
         console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
