@@ -27,12 +27,28 @@ let taimerId = null;
 let dateChanges = null;
 let timeInterval = 0;
 
+selector.btnStart.setAttribute('disabled', true);
+
 flatpickr(selector.inputDateTime, options);
 
 selector.btnStart.addEventListener(`click`, onStart);
 
 function onStart() {
   taimerId = setInterval(startTimer, 1000);
+}
+
+function checkDate(selectedDates) {
+  let date = Date.now();
+
+  if (selectedDates < date) {
+    selector.btnStart.setAttribute(`disabled`, true);
+    return window.alert(`Please choose a date in the future`);
+  }
+  timeInterval = selectedDates.getTime() - date;
+  dateChanges = convertMs(timeInterval);
+
+  renderDate(dateChanges);
+  selector.btnStart.removeAttribute(`disabled`);
 }
 
 function startTimer() {
@@ -43,29 +59,12 @@ function startTimer() {
 
   if (selector.seconds.textContent <= 0 && selector.minutes.textContent <= 0) {
     clearInterval(taimerId);
+
     return window.alert('Time end');
   } else {
     dateChanges = convertMs(timeInterval);
     renderDate(dateChanges);
   }
-}
-
-function checkDate(selectedDates) {
-  let date = Date.now();
-
-  if (selectedDates < date) {
-    selector.btnStart.setAttribute(`disabled`, true);
-    return window.alert(`Please choose a date in the future`);
-  } else {
-    selector.btnStart.removeAttribute('disabled');
-  }
-
-  timeInterval = selectedDates.getTime() - date;
-  dateChanges = convertMs(timeInterval);
-
-  // renderDate(dateChanges);
-  renderDate(dateChanges);
-  selector.btnStart.removeAttribute(`disabled`);
 }
 
 // Countdown
@@ -98,3 +97,21 @@ function renderDate(dateChanges) {
   selector.hours.textContent = dateChanges.hours;
   selector.day.textContent = dateChanges.days;
 }
+
+// function checkDate(selectedDates) {
+//   let date = Date.now();
+
+//   if (selectedDates < date) {
+//     selector.btnStart.setAttribute(`disabled`, true);
+//     return window.alert(`Please choose a date in the future`);
+//   } else {
+//     selector.btnStart.removeAttribute('disabled');
+//   }
+
+//   timeInterval = selectedDates.getTime() - date;
+//   dateChanges = convertMs(timeInterval);
+
+//   // renderDate(dateChanges);
+//   renderDate(dateChanges);
+//   selector.btnStart.removeAttribute(`disabled`);
+// }
